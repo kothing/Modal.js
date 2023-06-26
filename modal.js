@@ -1,16 +1,16 @@
 /**
  * Modal.js
- * @author Joao Teixeira
+ * @author Lyove
  * @version 1.0
- * Copyright (c) Joao Teixeira
- * https://github.com/jpntex
+ * Copyright (c) Lyove
+ * https://github.com/next-modal
  *
  */
 
-var Modal = (function() {
+const Modal = (function() {
   function Modal(type, options) {
 
-    var defaults = {
+    const defaults = {
       title: 'Notification', // modal title
       message: '', // modal message
       autoOpen: true, // show modal when declared
@@ -41,7 +41,7 @@ var Modal = (function() {
   }
 
   // modal templates
-  var templates = {
+  const templates = {
     modal: '<div class="modal-box">' +
       '<div class="modal-title">[[title]]<div class="close-modal" data-action="close">&times;</div></div>' +
       '<div class="modal-message">[[message]]</div>' +
@@ -54,12 +54,14 @@ var Modal = (function() {
 
   // generates the modal html from the templates given the modal's type and options
   function buildModal(type, options) {
-    var modal = document.createElement('div');
+    const modal = document.createElement('div');
     modal.className = 'modal';
 
-    if (options.closeOnBlur) modal.setAttribute('data-action', 'close');
+    if (options.closeOnBlur) {
+      modal.setAttribute('data-action', 'close');
+    }
 
-    var modalTmplt = templates.modal;
+    let modalTmplt = templates.modal;
 
     // set modal animations
     if (options.animated) {
@@ -72,14 +74,16 @@ var Modal = (function() {
     // add buttons based on modal type
     switch (type) {
       case 'confirm':
-        var buttons = templates.btn.replace('[[label]]', options.cancelLbl);
+        let buttons = templates.btn.replace('[[label]]', options.cancelLbl);
         buttons += templates.btnConfirm.replace('[[label]]', options.buttonLbl).replace('[[classes]]', options.buttonClass);
         modalTmplt = modalTmplt.replace('[[buttons]]', buttons);
         break;
       case 'alert':
-        var buttons = templates.btnAlert.replace('[[label]]', options.buttonLbl);
+        let buttons = templates.btnAlert.replace('[[label]]', options.buttonLbl);
         modalTmplt = modalTmplt.replace('[[buttons]]', buttons);
         break;
+      default:
+        //
     }
 
     modal.innerHTML = modalTmplt;
@@ -89,7 +93,7 @@ var Modal = (function() {
 
   // handle modal events
   Modal.prototype.handleEvent = function(event) {
-    var dataAction = event.target.getAttribute('data-action');
+    let dataAction = event.target.getAttribute('data-action');
 
     // animation ended callback
     if (event.type === 'animationend') {
@@ -126,7 +130,9 @@ var Modal = (function() {
   // initialize modal creation
   Modal.prototype.init = function() {
     this.modal = buildModal(this.type, this.options);
-    if (this.options.autoOpen) this.open();
+    if (this.options.autoOpen) {
+      this.open();
+    }
   };
 
   // open modal
@@ -165,9 +171,11 @@ var Modal = (function() {
 
   // helper functions
   function extend(obj1, obj2) {
-    for (var key in obj2)
-      if (obj2.hasOwnProperty(key))
+    for (let key in obj2) {
+      if (obj2.hasOwnProperty(key)) {
         obj1[key] = obj2[key];
+      }
+    }  
     return obj1;
   }
 
@@ -182,9 +190,15 @@ var Modal = (function() {
         message: options
       } : options;
 
-      if (isFunction(onClose)) options.onClose = onClose;
-      if (isFunction(onCancel)) options.onCancel = onCancel;
-      if (isFunction(onConfirm)) options.onConfirm = onConfirm;
+      if (isFunction(onClose)) {
+        options.onClose = onClose;
+      }
+      if (isFunction(onCancel)) {
+        options.onCancel = onCancel;
+      }
+      if (isFunction(onConfirm)) {
+        options.onConfirm = onConfirm;
+      }
 
       return new Modal('confirm', options);
     },
@@ -193,7 +207,9 @@ var Modal = (function() {
         message: options
       } : options;
 
-      if (isFunction(onClose)) options.onClose = onClose;
+      if (isFunction(onClose)) {
+        options.onClose = onClose;
+      }
 
       return new Modal('alert', options);
     }
